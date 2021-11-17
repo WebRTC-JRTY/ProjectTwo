@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "compile:sass": "node-sass public/sass/styles.scss public/stylesheets/styles.css",
+    "compile:sass": "node-sass public/sass/styles.scss public/stylesheets/sass.css",
     "dev:sass": "nodemon -e scss -x \"npm run compile:sass\"",
     "dev": "npm run compile:sass && nodemon ./bin/www",
     "cypress": "cypress open",

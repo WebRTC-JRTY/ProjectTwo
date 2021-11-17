@@ -7,7 +7,7 @@ const spotifyRouter = require("./routes/spotify.router");
 
 const app = express();
 
-app.use(logger("sdev"));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
