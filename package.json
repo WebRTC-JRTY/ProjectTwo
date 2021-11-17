@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www",
+    "compile:sass": "node-sass public/sass/styles.scss public/stylesheets/styles.css",
+    "dev:sass": "nodemon -e scss -x \"npm run compile:sass\"",
+    "dev": "npm run compile:sass && nodemon ./bin/www",
     "cypress": "cypress open",
     "test": "jest --watch",
     "test:ci": "jest --ci",
@@ -32,6 +34,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-testing-library": "^4.12.4",
     "jest": "^27.3.1",
+    "node-sass": "^6.0.1",
     "nodemon": "^2.0.14"
   },
   "description": "[![WebRTC Nodejs CI](https://github.com/YourEpicness/ProjectTwo/actions/workflows/test.yml/badge.svg)](https://github.com/YourEpicness/ProjectTwo/actions/workflows/test.yml)",
