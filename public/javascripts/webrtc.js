@@ -32,10 +32,30 @@ function handleButton(e) {
   }
 }
 
+function handleChatForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const input = form.querySelector(".enter-message");
+  const message = input.value;
+
+  appendMessage("self", message);
+}
+
+function appendMessage(sender, message) {
+  const log = document.querySelector(".chat");
+  const li = document.createElement("li");
+  li.innerText = message;
+  li.className = sender;
+
+  log.appendChild(li);
+}
+
 // DOM Elements
 const button = document.querySelector(".call-button");
+const chat_form = document.querySelector(".chat-form");
 
 button.addEventListener("click", handleButton);
+chat_form.addEventListener("submit", handleChatForm);
 
 document.querySelector(".room-number").innerText = `#${namespace}`;
 function joinCall() {
