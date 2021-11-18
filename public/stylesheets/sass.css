@@ -88,10 +88,10 @@ button {
   @media (min-width: 1280px) {
     .layout {
       display: grid;
-      grid-template-areas: "room ." "title ." "subtitle chat" "video chat" "button1 button2";
+      grid-template-areas: "room ." "title ." "subtitle chat" "video chat" "button button";
       grid-template-columns: 60% 40%;
-      grid-template-rows: 4rem 4rem 3rem 2fr 3rem;
-      gap: 2.5rem;
+      grid-template-rows: 5rem 5rem 4.5rem 2fr 4rem;
+      gap: 2rem;
       margin: 3rem; } }
 
 .room {
@@ -175,17 +175,29 @@ button {
     padding: 2rem 2rem;
     border-bottom: var(--border-default);
     box-sizing: border-box; }
+    @media (min-width: 1280px) {
+      .chat-container .topic-title {
+        font-size: 2.4rem; } }
   .chat-container .chat {
     padding: 2rem 2rem; }
+    @media (min-width: 1280px) {
+      .chat-container .chat {
+        font-size: 2.4rem; } }
     .chat-container .chat-message .person-name {
       font-weight: bold; }
     .chat-container .chat-control {
       display: flex; }
+      @media (min-width: 1280px) {
+        .chat-container .chat-control {
+          margin-top: auto; } }
       .chat-container .chat-control .enter-message {
         font-size: 4rem;
         padding: 2rem 2rem;
         flex-basis: 70%;
         border-top: var(--border-default); }
+        @media (min-width: 1280px) {
+          .chat-container .chat-control .enter-message {
+            font-size: 2.4rem; } }
         .chat-container .chat-control .enter-message::placeholder {
           font-style: italic; }
       .chat-container .chat-control .send {
@@ -193,21 +205,35 @@ button {
         border-radius: 0;
         background-color: var(--color-darkgreen); }
 
-.button-container {
+.chat-form {
+  height: 100%;
   display: flex;
-  justify-content: space-between; }
+  flex-direction: column;
+  justify-content: flex-end; }
+
+.button-container {
+  grid-area: button;
+  display: flex;
+  justify-content: space-between;
+  margin: 5rem 0; }
+  @media (min-width: 1280px) {
+    .button-container {
+      grid-area: button;
+      display: flex;
+      justify-content: space-between;
+      align-items: center; } }
   .button-container .leave-room {
     width: 35rem;
     margin: 5rem 0;
     background-color: var(--color-darkred); }
     @media (min-width: 1280px) {
       .button-container .leave-room {
-        grid-area: button1;
+        grid-area: button;
         width: 20%; } }
   .button-container .start-listening {
-    width: 40rem;
+    width: 38rem;
     margin: 5rem 0;
     background-color: var(--color-green); }
     @media (min-width: 1280px) {
       .button-container .start-listening {
-        grid-area: button2; } }
+        grid-area: button; } }
