@@ -9,43 +9,77 @@ html {
     font-size: 62.5%;
     line-height: 26px;
     background-color: var(--bg-color);
+    background-color: var(--bg-color);
+}
+
+.layout {
+    display: grid;
+    grid-template-areas:
+    "room ."
+    "title ."
+    "subtitle chat"
+    "video chat"
+    "button1 button2";
+    grid-template-columns: 60% 40%;
+    grid-template-rows: 4rem 4rem 3rem 2fr 3rem;
+    gap: 2rem;
+    margin: 3rem;
 }
 
 .room {
+    grid-area: room;
     font-size: 2.4rem;
     font-weight: bold;
 }
 
 .header {
+    grid-area: title;
     font-size: 4.8rem;
     font-weight: bold;
 }
 .subtitle {
+    grid-area: subtitle;
     font-size: 3.6rem;
     font-weight: var(--medium-font);
 }
 .video-container {
+    grid-area: video;
+    border: black 2px solid;
+    border-radius: 2rem;
     font-size: 2.4rem;
     font-weight: bold;
     color: white;
+    display: grid;
+    padding: 2.5rem;
+    gap: 1rem;
+    width: 60%;
+    grid-template-columns: repeat(3, minmax(10px, 1fr));
 
     &-icon {
+        position: relative;
+        border: black 2px solid;
+        border-radius: 2rem;
+
         .name {
-
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
         }
-        .self {
-
+        #self {
+            width: 200px;
         }
         .peer {
-
+            width: 200px;
         }
     }
-    .leave-room {
-
-    }
+}
+.leave-room {
+    grid-area: button1;
+    width: 20%;
 }
 
 .chat-container {
+    grid-area: chat;
     .chat-title {
 
     }
@@ -67,8 +101,8 @@ html {
 
             }
         }
-        .start-listening {
-
-        }
     }
+}
+.start-listening {
+    grid-area: button2;
 }

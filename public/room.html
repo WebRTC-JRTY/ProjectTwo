@@ -12,44 +12,70 @@
     <link rel="stylesheet" href="stylesheets/sass.css" />
   </head>
   <body>
-    <span class="room">Room: <span class="room-number">323131</span></span>
-    <h1 class="header">Topic: <span>Marvel vs DC Movies</span></h1>
-    <h2 class="subtitle">Participants</h2>
-    <div class="video-container">
-      <div class="video-container-icon">
-        <label for="" class="name"> You </label>
-        <video id="self" autoplay muted playsinline></video>
-      </div>
-      <div class="video-container-icon">
-        <label for="" class="name"> John</label>
-        <video class="peer" autoplay muted playsinline></video>
-      </div>
-      <div class="video-container-icon">
-        <label for="" class="name"> Julie</label>
-        <video class="peer" autoplay muted playsinline></video>
-      </div>
-      <div class="video-container-icon">
-        <label for="" class="name"> Jessica</label>
-        <video class="peer" autoplay muted playsinline></video>
+    <section class="layout">
+      <span class="room">Room: <span class="room-number">323131</span></span>
+      <h1 class="header">Topic: <span>Marvel vs DC Movies</span></h1>
+      <h2 class="subtitle">Participants</h2>
+      <div class="video-container">
+        <div class="video-container-icon">
+          <label for="" class="name"> You </label>
+          <video
+            id="self"
+            poster="images/placeholder.png"
+            autoplay
+            muted
+            playsinline
+          ></video>
+        </div>
+        <div class="video-container-icon">
+          <label for="" class="name"> John</label>
+          <video
+            class="peer"
+            poster="images/placeholder.png"
+            autoplay
+            muted
+            playsinline
+          ></video>
+        </div>
+        <div class="video-container-icon">
+          <label for="" class="name"> Julie</label>
+          <video
+            class="peer"
+            poster="images/placeholder.png"
+            autoplay
+            muted
+            playsinline
+          ></video>
+        </div>
+        <div class="video-container-icon">
+          <label for="" class="name"> Jessica</label>
+          <video
+            class="peer"
+            poster="images/placeholder.png"
+            autoplay
+            muted
+            playsinline
+          ></video>
+        </div>
       </div>
       <button class="leave-room">Leave Room</button>
-    </div>
-    <div class="chat-container">
-      <h2 class="chat-title">Group Chat</h2>
-      <h3 class="topic-title">Marvel vs DC Movies</h3>
-      <form action="#">
-        <ul class="chat">
-          <li class="chat-message">
-            <span class="person-name"> Julie:</span> I love this topic!
-          </li>
-        </ul>
-        <div class="chat-control">
-          <input type="text" class="enter-message" />
-          <button type="submit" class="send">Send</button>
-        </div>
+      <div class="chat-container">
+        <h2 class="chat-title">Group Chat</h2>
+        <h3 class="topic-title">Marvel vs DC Movies</h3>
+        <form action="#">
+          <ul class="chat">
+            <li class="chat-message">
+              <span class="person-name"> Julie:</span> I love this topic!
+            </li>
+          </ul>
+          <div class="chat-control">
+            <input type="text" class="enter-message" />
+            <button type="submit" class="send">Send</button>
+          </div>
+        </form>
         <button class="start-listening">Start a listening session ➡</button>
-      </form>
-    </div>
+      </div>
+    </section>
     <script src="javascripts/webrtc.js"></script>
   </body>
 </html>
