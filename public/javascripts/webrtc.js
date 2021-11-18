@@ -14,8 +14,8 @@ const $self = {
 };
 
 const $peer = {
-  connection: new RTCPeerConnection($self.rtcConfig);
-}
+  connection: new RTCPeerConnection($self.rtcConfig),
+};
 
 requestUserMedia($self.constraints);
 
@@ -237,6 +237,27 @@ function leaveCall() {
 function resetCall(peer) {
   $peer.connection.close();
   $peer.connection = new RTCPeerConnection($self.rtcConfig);
+}
+
+function resetAndRetryConnection(peer) {
+  resetCall(peer);
+  $self.isMakingOffer = false;
+  $self.isIgnoringOffer = false;
+  $self.isSettingRemoteAnswerPending = false;
+
+  // host peer suprpresses initial offer
+  $self.isSuppressingInitialOffer = $self.isHost;
+  registerRtcEvents(peer);
+  establishCallFeatures(peer);
+
+  // Let the remote peer know we're resetting
+  if ($self.isPolite) {
+    sc.emit("signal", {
+      description: {
+        type: "_reset",
+      },
+    });
+  }
 }
 
 // Utility Functions for WebRTC
