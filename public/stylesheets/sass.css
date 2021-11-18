@@ -244,6 +244,9 @@ button {
       .button-container .start-listening {
         grid-area: button; } }
 
+.clickable {
+  cursor: pointer; }
+
 .nav {
   background-color: white;
   position: relative;
