@@ -2,8 +2,23 @@
 
 // DOM Stuff
 const logo = document.querySelector(".logo");
+const anchor = document.querySelectorAll("a");
 
 logo.addEventListener("click", goHome);
+console.log(anchor);
+
+anchor.forEach((item) => {
+  const url = item.baseURI;
+  item.addEventListener("click", removeExtension(url));
+  console.log(url);
+});
+// anchor.addEventListener("click", removeExtension);
+
+function removeExtension(url) {
+  const link = url;
+  link.split(".html")[0];
+  window.history.replaceState(null, null, link);
+}
 
 function goHome() {
   window.location.href = "/";
