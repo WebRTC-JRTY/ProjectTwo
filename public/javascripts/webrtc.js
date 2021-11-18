@@ -2,11 +2,15 @@
 
 // Self and Peer Objects
 const $self = {
+  rtcConfig: null,
   constraints: {
     audio: false,
     video: true,
   },
   isHost: false,
+  isMakingOffer: false,
+  isIgnoringOffer: false,
+  isSettingRemoteAnswerPending: false,
 };
 
 requestUserMedia($self.constraints);
@@ -16,6 +20,69 @@ async function requestUserMedia(constraints) {
   const video = document.querySelector("#self");
   $self.stream = await navigator.mediaDevices.getUserMedia(constraints);
   video.srcObject = $self.stream;
+}
+
+// User-Media/DOM
+function displayStream(selector, stream) {
+  const video = document.querySelector(selector);
+  video.srcObject = stream;
+}
+
+// WebRTC Events
+function establishCallFeatures(peer) {
+  peer.connection.addTrack($self.stream.getTracks()[0], $self.stream);
+  peer.chatChannel = peer.connection.createDataChannel("chat", {
+    negotiated: true,
+    id: 50,
+  });
+  peer.chatChannel.onmessage = function ({ data }) {
+    appendMessage("peer", data);
+  };
+}
+
+function registerRtcEvents(peer) {
+  peer.connection.onnegotiationneeded = handleRtcNegotiation;
+  peer.connection.onicecandidate = handleIceCandidate;
+  peer.connection.ontrack = handleRtcTrack;
+  peer.connection.ondatachannel = handleRtcDataChannel;
+}
+
+async function handleRtcNegotiation() {
+  // no offers made if suppressing
+  if ($self.isSuppressingInitialOffer) return;
+  console.log("RTC negotiation needed...");
+  // send SDP description
+  $self.isMakingOffer = true;
+  try {
+    // modern setLocalDescription
+    await $peer.connection.setLocalDescription();
+  } catch (e) {
+    // fallback for old browsers
+    const offer = await $peer.connection.createOffer();
+    await $peer.connection.setLocalDescription(offer);
+  } finally {
+    // ^...
+    sc.emit("signal", {
+      description: $peer.connection.localDescription,
+    });
+  }
+  $self.isMakingOffer = false;
+}
+
+function handleRtcDataChannel({ channel }) {
+  console.log("Heard channel", channel.label, "with ID", channel.id);
+  document.querySelector("#peer").className = channel.label;
+}
+
+function handleIceCandidate({ candidate }) {
+  sc.emit("signal", {
+    candidate: candidate,
+  });
+}
+
+function handleRtcTrack({ track, streams: [stream] }) {
+  // attach our track to the DOM
+  displayStream("#peer", stream);
 }
 
 // Socket IO
