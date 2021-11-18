@@ -2,6 +2,9 @@
 
 :root {
     --bg-color: #F6E7D4;
+    --color-darkred: #A61B1D;
+    --color-green: #107556;
+    --color-darkgreen: #094130;
 }
 
 html {
@@ -12,48 +15,81 @@ html {
     background-color: var(--bg-color);
 }
 
+button {
+    font-size: 4rem;
+    border-radius: 1rem;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    padding: 2rem 4rem;
+}
+
 .layout {
-    display: grid;
-    grid-template-areas:
-    "room ."
-    "title ."
-    "subtitle chat"
-    "video chat"
-    "button1 button2";
-    grid-template-columns: 60% 40%;
-    grid-template-rows: 4rem 4rem 3rem 2fr 3rem;
-    gap: 2rem;
-    margin: 3rem;
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: 1280px) {
+        display: grid;
+        grid-template-areas:
+        "room ."
+        "title ."
+        "subtitle chat"
+        "video chat"
+        "button1 button2";
+        grid-template-columns: 60% 40%;
+        grid-template-rows: 4rem 4rem 3rem 2fr 3rem;
+        gap: 2.5rem;
+        margin: 3rem;
+    }
 }
 
 .room {
-    grid-area: room;
-    font-size: 2.4rem;
     font-weight: bold;
+    font-size: 4rem;
+    margin: 2rem 0;
+
+    @media (min-width: 1280px) {
+        grid-area: room;
+        font-size: 2.4rem;
+    }
 }
 
 .header {
-    grid-area: title;
-    font-size: 4.8rem;
+    margin: 2rem 0;
+    font-size: 6rem;
     font-weight: bold;
+
+    @media (min-width: 1280px) {
+        grid-area: title;
+        font-size: 4.8rem;
+    }
 }
 .subtitle {
-    grid-area: subtitle;
-    font-size: 3.6rem;
+    margin: 2rem 0;
     font-weight: var(--medium-font);
+    font-size: 5rem;
+    @media (min-width: 1280px) {
+        grid-area: subtitle;
+        font-size: 3.6rem;
+    }
 }
+
 .video-container {
-    grid-area: video;
-    border: black 2px solid;
-    border-radius: 2rem;
-    font-size: 2.4rem;
-    font-weight: bold;
-    color: white;
-    display: grid;
-    padding: 2.5rem;
-    gap: 1rem;
-    width: 60%;
-    grid-template-columns: repeat(3, minmax(10px, 1fr));
+
+    @media (min-width: 1280px) {
+        grid-area: video;
+        border: black 2px solid;
+        border-radius: 2rem;
+        font-size: 2.4rem;
+        font-weight: bold;
+        color: white;
+        display: grid;
+        padding: 2.5rem;
+        gap: 1rem;
+        width: auto;
+        grid-template-columns: repeat(3, minmax(10px, 1fr));
+    }
 
     &-icon {
         position: relative;
@@ -73,9 +109,15 @@ html {
         }
     }
 }
+
 .leave-room {
-    grid-area: button1;
-    width: 20%;
+    width: 35rem;
+    background-color: var(--color-darkred);
+
+    @media (min-width: 1280px) {
+        grid-area: button1;
+        width: 20%;
+    }
 }
 
 .chat-container {
@@ -98,11 +140,15 @@ html {
 
             }
             .send {
-
+                background-color: var(--color-darkgreen);
             }
         }
     }
 }
 .start-listening {
-    grid-area: button2;
+    background-color: var(--color-green);
+    
+    @media (min-width: 1280px) {
+        grid-area: button2;
+    }
 }
