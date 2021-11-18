@@ -13,6 +13,10 @@ const $self = {
   isSettingRemoteAnswerPending: false,
 };
 
+const $peer = {
+  connection: new RTCPeerConnection($self.rtcConfig);
+}
+
 requestUserMedia($self.constraints);
 
 // On page load, asks for permission to use audio/video.
