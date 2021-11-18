@@ -1,6 +1,7 @@
 :root {
   --primary-font: Nunito, sans-serif;
   --secondary-font: Lora, sans-serif;
+  --medium-font: 500;
   --semibold-font: 600;
   --extrabold-font: 800;
   --black-font: 900; }
@@ -36,6 +37,11 @@
 
 @font-face {
   font-family: Lora;
+  src: url(../fonts/Lora/Lora-Medium.ttf);
+  font-weight: 500; }
+
+@font-face {
+  font-family: Lora;
   src: url(../fonts/Lora/Lora-SemiBold.ttf);
   font-weight: 600; }
 
@@ -54,5 +60,28 @@
   src: url(../fonts/Lora/Lora-Black.ttf);
   font-weight: 900; }
 
-body {
-  font-family: Nunito, sans-serif; }
+:root {
+  --bg-color: #F6E7D4; }
+
+html {
+  font-family: Lora, sans-serif;
+  font-size: 62.5%;
+  line-height: 26px;
+  background-color: var(--bg-color); }
+
+.room {
+  font-size: 2.4rem;
+  font-weight: bold; }
+
+.header {
+  font-size: 4.8rem;
+  font-weight: bold; }
+
+.subtitle {
+  font-size: 3.6rem;
+  font-weight: var(--medium-font); }
+
+.video-container {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: white; }

@@ -1,6 +1,7 @@
 :root {
     --primary-font: Nunito, sans-serif;
     --secondary-font: Lora, sans-serif;
+    --medium-font: 500;
     --semibold-font: 600;
     --extrabold-font: 800;
     --black-font: 900;
@@ -41,6 +42,13 @@
 @font-face {
     font-family: Lora;
     src: url(../fonts/Lora/Lora-Regular.ttf);
+}
+
+
+@font-face {
+    font-family: Lora;
+    src: url(../fonts/Lora/Lora-Medium.ttf);
+    font-weight: 500;
 }
 
 @font-face {
