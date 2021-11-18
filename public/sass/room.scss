@@ -25,6 +25,11 @@ button {
     color: white;
     font-weight: bold;
     padding: 2rem 3rem;
+    cursor: pointer;
+    
+    &:hover {
+        filter: brightness(1.5);
+    }
 }
 
 .layout {
