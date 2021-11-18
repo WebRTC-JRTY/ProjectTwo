@@ -102,6 +102,7 @@ function registerScEvents() {
 
 function handleScConnect() {
   console.log("Connected to signaling channel!");
+  $self.isHost = true;
 }
 
 function handleScConnectedPeer() {
@@ -110,6 +111,75 @@ function handleScConnectedPeer() {
 
 function handleScDisconnectedPeer() {
   console.log("Heard disconnected peer event!");
+  resetCall($peer);
+  registerRtcEvents($peer);
+  establishCallFeatures($peer);
+}
+
+async function handleScSignal({ description, candidate }) {
+  console.log("Heard signal event!");
+  if (description) {
+    console.log("Received SDP Signal:", description);
+
+    if (description.type === "_reset") {
+      resetAndRetryConnection();
+      return;
+    }
+
+    const readyForOffer =
+      !$self.isMakingOffer &&
+      ($peer.connection.signalingState === "stable" ||
+        $self.isSettingRemoteAnswerPending);
+
+    const offerCollision = description.type === "offer" && !readyForOffer;
+
+    $self.isIgnoringOffer = !$self.isHost && offerCollision;
+
+    if ($self.isIgnoringOffer) return;
+
+    $self.isSettingRemoteAnswerPending = description.type === "answer";
+    console.log(
+      "Signaling state on incoming description:",
+      $peer.connection.signalingState
+    );
+    try {
+      await $peer.connection.setRemoteDescription(description);
+    } catch (e) {
+      // if we cant setRemoteDescription, then reset
+      resetAndRetryConnection($peer);
+      return;
+    }
+
+    if (description.type === "offer") {
+      try {
+        // modern setLocalDescription
+        await $peer.connection.setLocalDescription();
+      } catch (e) {
+        // fallback for old browsers
+        const answer = await $peer.connection.createAnswer();
+        await $peer.connection.setLocalDescription(offer);
+      } finally {
+        // ^...
+        sc.emit("signal", {
+          description: $peer.connection.localDescription,
+        });
+        // host does'nt have to suppress initial offers
+        $self.isSuppressingInitialOffer = false;
+      }
+    } else if (candidate) {
+      console.log("Receieved ICE candidate:", candidate);
+    }
+  } else if (candidate) {
+    console.log("Received ICE candidate:", candidate);
+
+    try {
+      await $peer.connection.addIceCandidate(candidate);
+    } catch (e) {
+      if (!$self.isIgnoringOffer) {
+        console.error("Cannot add ICE candidadte for peer", e);
+      }
+    }
+  }
 }
 
 // DOM Events
@@ -159,7 +229,28 @@ function leaveCall() {
   button.innerText = "Join Room";
   sc.close();
 }
-// WebRTC Events
+
+function resetCall(peer) {
+  $peer.connection.close();
+  $peer.connection = new RTCPeerConnection($self.rtcConfig);
+}
+
+// Utility Functions for WebRTC
+async function handleFallbackRtc(offerType) {
+  try {
+    // modern setLocalDescription
+    await $peer.connection.setLocalDescription();
+  } catch (e) {
+    // fallback for old browsers
+    const offer = await $peer.connection.offerType;
+    await $peer.connection.setLocalDescription(offer);
+  } finally {
+    // ^...
+    sc.emit("signal", {
+      description: $peer.connection.localDescription,
+    });
+  }
+}
 
 // Utility Functions for SocketIO
 function prepareNamespace(hash, set_location) {
