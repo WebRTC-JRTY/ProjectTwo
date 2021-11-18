@@ -5,13 +5,16 @@
     --color-darkred: #A61B1D;
     --color-green: #107556;
     --color-darkgreen: #094130;
-    --border-default: 2px solid black;
+    --border-default: 1px solid black;
 }
 
 html {
     font-family: Lora, sans-serif;
     font-size: 62.5%;
     line-height: 26px;
+}
+
+.roomhtml {
     background-color: var(--bg-color);
 }
 
@@ -97,21 +100,22 @@ button {
         position: relative;
         border: black 2px solid;
         border-radius: 2rem;
+        overflow: hidden;
 
         .name {
             background-color: black;
             padding: 1rem 2rem;
             position: absolute;
-            bottom: 1rem;
+            bottom: 4rem;
             left: 1rem;
         }
 
         #self {
-            width: 200px;
+            width: 100%;
         }
 
         .peer {
-            width: 200px;
+            width: 100%;
         }
     }
 }

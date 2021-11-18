@@ -7,23 +7,25 @@
   <link rel="stylesheet" href="stylesheets/reset.css" />
   <link rel="stylesheet" href="stylesheets/sass.css">
 </head>
-<body>
+<body class="roomhtml">
   <nav class="nav">
     <img src="images/svg/Topick-Logo.svg" alt="Logo" class="logo" />
+
     <ul class="navbar">
-      <li><a href="#">Home<a>
-      <li><a href="topics.html">Browse Topics</a></li>
-      <li><a href="room.html">Chat Room<a></li>
-      <li><a href="spotify.html">Spotify<a></li>
-    <ul>
-      <div class="button-container">
-        <li class="navbar-item"><a href="#" class="nav-button">Login</a></li>
-        <li class="navbar-item"><a href="topics.html" class="nav-button">Start chatting!</a></li>
-      </div>
+      <li><a class="navbar-item" href="#">Home<a>
+      <li><a class="navbar-item" href="topics.html">Browse Topics</a></li>
+      <li><a class="navbar-item" href="room.html">Chat Room</a></li>
+      <li><a class="navbar-item" href="spotify.html">Spotify</a></li>
+    </ul>
+    
+    <div class="nav-button-container">
+      <a href="#" class="nav-button">Login</a>
+      <a href="topics.html" class="start-button">Start chatting!</a>
+    </div>
   </nav>
   <h2>Talk about anything with anyone from anywhere</h2>
   <p>Create a topic to talk about and invite your friends! Or join someone else’s topic and start chatting!</p>
-  <button onclick="homebFunc()">Start chatting!</button>
+  <button class="join" type="button" id="call-button">Start chatting!</button>
   <script async src="javascripts/main.js"></script>
 </body>
 <footer>

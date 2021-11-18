@@ -5,14 +5,23 @@
 /* stylelint-disable */
 a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block}html{line-height:1}body{line-height:inherit}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
 /* stylelint-enable */
- 
+
+
 /* Begin site styles below */
+<<<<<<< HEAD
  
 /* body{
+=======
+=======
+
+/* Begin site styles below */
+
+body{
+>>>>>>> b0b39697f400e078f3540ae3bb125ce18f50af59
    background-color: white;
    flex-direction: column;
 }
- 
+
 h1{
    color: black;
    font-family: Georgia, 'Times New Roman', Times, serif;
@@ -20,7 +29,7 @@ h1{
    text-align: left;
    line-height: 50px;
 }
- 
+
 h2{
    color:black;
    font-family: Georgia, 'Times New Roman', Times, serif;
@@ -28,7 +37,7 @@ h2{
    line-height: 50px;
    text-align: center;
 }
- 
+
 footer{
    color: black;
    font-family: Georgia, 'Times New Roman', Times, serif;
@@ -36,7 +45,7 @@ footer{
    text-align: left;
    line-height: 100px;
 }
- 
+
 ul{
    list-style-type: none;
    margin: 0;
@@ -45,11 +54,11 @@ ul{
    border: 1px solid #d3d3d3;
    background-color: white;
 }
- 
+
 li{
    float: left;
 }
- 
+
 li a{
    display: inline-block;
    color: black;
@@ -57,7 +66,7 @@ li a{
    padding: 8px 10px;
    text-decoration: none;
 }
- 
+
 li a:hover{
    background-color: #d3d3d3;
 } */
