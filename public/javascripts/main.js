@@ -1,23 +1,46 @@
 "use strict";
 
 // DOM Stuff
+const url = "https://localhost:3000/";
 const logo = document.querySelector(".logo");
 const anchor = document.querySelectorAll("a");
-
 logo.addEventListener("click", goHome);
 console.log(anchor);
 
-anchor.forEach((item) => {
-  const url = item.baseURI;
-  item.addEventListener("click", removeExtension(url));
-  console.log(url);
+const anchorarray = Object.values(anchor);
+console.log(anchorarray);
+let links = [];
+let cleanLinks = [];
+let validLinks = [];
+anchorarray.forEach((item) => {
+  console.log(item.href);
+  links.push(item.href);
 });
-// anchor.addEventListener("click", removeExtension);
+console.log(links);
 
-function removeExtension(url) {
-  const link = url;
-  link.split(".html")[0];
+const validLink = links.filter((link) => url !== link);
+console.log(validLink);
+
+links.forEach((link) => {
+  const cleanLink = link.split(".html")[0];
+  console.log(cleanLink);
+  cleanLinks.push(cleanLink);
+});
+console.log(cleanLinks);
+
+anchorarray.forEach((item) => {
+  const URL = item.href;
+  console.log(URL);
+  item.addEventListener("click", removeExtension);
+});
+
+function removeExtension(e) {
+  const link = e.target;
+  console.log(link);
+  const cleanLink = link.split(".html")[0];
   window.history.replaceState(null, null, link);
+
+  return;
 }
 
 function goHome() {
