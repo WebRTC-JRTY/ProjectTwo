@@ -22,6 +22,26 @@ const namespace = prepareNamespace(window.location.hash, true);
 
 const sc = io.connect("/" + namespace, { autoConnect: false });
 
+// Socket IO Signaling Channel Events
+
+function registerScEvents() {
+  sc.on("connect", handleScConnect);
+  sc.on("connected peer", handleScConnectedPeer);
+  sc.on("disconnected peer", handleScDisconnectedPeer);
+}
+
+function handleScConnect() {
+  console.log("Connected to signaling channel!");
+}
+
+function handleScConnectedPeer() {
+  console.log("Heard connected peer event!");
+}
+
+function handleScDisconnectedPeer() {
+  console.log("Heard disconnected peer event!");
+}
+
 // DOM Events
 function handleButton(e) {
   const button = e.target;
