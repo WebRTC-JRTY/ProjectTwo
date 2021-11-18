@@ -5,6 +5,7 @@
     --color-darkred: #A61B1D;
     --color-green: #107556;
     --color-darkgreen: #094130;
+    --border-default: 2px solid black;
 }
 
 html {
@@ -12,20 +13,19 @@ html {
     font-size: 62.5%;
     line-height: 26px;
     background-color: var(--bg-color);
-    background-color: var(--bg-color);
 }
 
 button {
-    font-size: 4rem;
+    font-size: 2.4rem;
     border-radius: 1rem;
     background-color: black;
     color: white;
     font-weight: bold;
-    padding: 2rem 4rem;
+    padding: 2rem 3rem;
 }
 
 .layout {
-    margin: 2rem;
+    margin: 4rem;
     display: flex;
     flex-direction: column;
 
@@ -76,17 +76,19 @@ button {
 }
 
 .video-container {
+    display: grid;
+    font-weight: bold;
+    color: white;
+    padding: 2.5rem;
+    font-size: 3rem;
+    border: black 2px solid;
+    border-radius: 2rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 
     @media (min-width: 1280px) {
         grid-area: video;
-        border: black 2px solid;
-        border-radius: 2rem;
         font-size: 2.4rem;
-        font-weight: bold;
-        color: white;
-        display: grid;
-        padding: 2.5rem;
-        gap: 1rem;
         width: auto;
         grid-template-columns: repeat(3, minmax(10px, 1fr));
     }
@@ -97,58 +99,105 @@ button {
         border-radius: 2rem;
 
         .name {
+            background-color: black;
+            padding: 1rem 2rem;
             position: absolute;
             bottom: 1rem;
             left: 1rem;
         }
+
         #self {
             width: 200px;
         }
+
         .peer {
             width: 200px;
         }
     }
 }
 
-.leave-room {
-    width: 35rem;
-    background-color: var(--color-darkred);
-
-    @media (min-width: 1280px) {
-        grid-area: button1;
-        width: 20%;
-    }
-}
 
 .chat-container {
-    grid-area: chat;
-    .chat-title {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border: black solid 2px;
+    border-radius: 2rem 2rem 0 0;
+    font-size: 3.5rem;
+    margin: 5rem 0;
 
+    @media (min-width: 1280px) {
+        grid-area: chat;
     }
-    .topic-title {
 
+    .chat-title {
+        text-align: center;
+        padding: 2rem 2rem;
+        font-weight: var(--medium-font);
+        box-sizing: border-box;
+        border-bottom: var(--border-default);
+    }
+
+    .topic-title {
+        font-weight: bold;
+        font-size: 4.8rem;
+        padding: 2rem 2rem;
+        border-bottom: var(--border-default);
+        box-sizing: border-box;
     }
 
     .chat {
+        padding: 2rem 2rem;
+
         &-message {
             .person-name {
-
+                font-weight: bold;
             }
         }
         &-control {
-            .enter-message {
+            display: flex;
 
+            .enter-message {
+                font-size: 4rem;
+                padding: 2rem 2rem;
+                flex-basis: 70%;
+                border-top: var(--border-default);
+
+                &::placeholder {
+                    font-style: italic;
+                }
             }
+
             .send {
+                flex-basis: 30%;
+                border-radius: 0;
                 background-color: var(--color-darkgreen);
             }
         }
     }
 }
-.start-listening {
-    background-color: var(--color-green);
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    .leave-room {
+        width: 35rem;
+        margin: 5rem 0;
+        background-color: var(--color-darkred);
     
-    @media (min-width: 1280px) {
-        grid-area: button2;
+        @media (min-width: 1280px) {
+            grid-area: button1;
+            width: 20%;
+        }
     }
+    
+    .start-listening {
+        width: 40rem;
+        margin: 5rem 0;
+        background-color: var(--color-green);
+    
+        @media (min-width: 1280px) {
+            grid-area: button2;
+        }
+    }   
 }

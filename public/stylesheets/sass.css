@@ -64,25 +64,25 @@
   --bg-color: #F6E7D4;
   --color-darkred: #A61B1D;
   --color-green: #107556;
-  --color-darkgreen: #094130; }
+  --color-darkgreen: #094130;
+  --border-default: 2px solid black; }
 
 html {
   font-family: Lora, sans-serif;
   font-size: 62.5%;
   line-height: 26px;
-  background-color: var(--bg-color);
   background-color: var(--bg-color); }
 
 button {
-  font-size: 4rem;
+  font-size: 2.4rem;
   border-radius: 1rem;
   background-color: black;
   color: white;
   font-weight: bold;
-  padding: 2rem 4rem; }
+  padding: 2rem 3rem; }
 
 .layout {
-  margin: 2rem;
+  margin: 4rem;
   display: flex;
   flex-direction: column; }
   @media (min-width: 1280px) {
@@ -121,48 +121,93 @@ button {
       grid-area: subtitle;
       font-size: 3.6rem; } }
 
-@media (min-width: 1280px) {
-  .video-container {
-    grid-area: video;
-    border: black 2px solid;
-    border-radius: 2rem;
-    font-size: 2.4rem;
-    font-weight: bold;
-    color: white;
-    display: grid;
-    padding: 2.5rem;
-    gap: 1rem;
-    width: auto;
-    grid-template-columns: repeat(3, minmax(10px, 1fr)); } }
-
-.video-container-icon {
-  position: relative;
+.video-container {
+  display: grid;
+  font-weight: bold;
+  color: white;
+  padding: 2.5rem;
+  font-size: 3rem;
   border: black 2px solid;
-  border-radius: 2rem; }
-  .video-container-icon .name {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem; }
-  .video-container-icon #self {
-    width: 200px; }
-  .video-container-icon .peer {
-    width: 200px; }
-
-.leave-room {
-  width: 35rem;
-  background-color: var(--color-darkred); }
+  border-radius: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem; }
   @media (min-width: 1280px) {
-    .leave-room {
-      grid-area: button1;
-      width: 20%; } }
+    .video-container {
+      grid-area: video;
+      font-size: 2.4rem;
+      width: auto;
+      grid-template-columns: repeat(3, minmax(10px, 1fr)); } }
+  .video-container-icon {
+    position: relative;
+    border: black 2px solid;
+    border-radius: 2rem; }
+    .video-container-icon .name {
+      background-color: black;
+      padding: 1rem 2rem;
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem; }
+    .video-container-icon #self {
+      width: 200px; }
+    .video-container-icon .peer {
+      width: 200px; }
 
 .chat-container {
-  grid-area: chat; }
-  .chat-container .chat-control .send {
-    background-color: var(--color-darkgreen); }
-
-.start-listening {
-  background-color: var(--color-green); }
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: black solid 2px;
+  border-radius: 2rem 2rem 0 0;
+  font-size: 3.5rem;
+  margin: 5rem 0; }
   @media (min-width: 1280px) {
-    .start-listening {
-      grid-area: button2; } }
+    .chat-container {
+      grid-area: chat; } }
+  .chat-container .chat-title {
+    text-align: center;
+    padding: 2rem 2rem;
+    font-weight: var(--medium-font);
+    box-sizing: border-box;
+    border-bottom: var(--border-default); }
+  .chat-container .topic-title {
+    font-weight: bold;
+    font-size: 4.8rem;
+    padding: 2rem 2rem;
+    border-bottom: var(--border-default);
+    box-sizing: border-box; }
+  .chat-container .chat {
+    padding: 2rem 2rem; }
+    .chat-container .chat-message .person-name {
+      font-weight: bold; }
+    .chat-container .chat-control {
+      display: flex; }
+      .chat-container .chat-control .enter-message {
+        font-size: 4rem;
+        padding: 2rem 2rem;
+        flex-basis: 70%;
+        border-top: var(--border-default); }
+        .chat-container .chat-control .enter-message::placeholder {
+          font-style: italic; }
+      .chat-container .chat-control .send {
+        flex-basis: 30%;
+        border-radius: 0;
+        background-color: var(--color-darkgreen); }
+
+.button-container {
+  display: flex;
+  justify-content: space-between; }
+  .button-container .leave-room {
+    width: 35rem;
+    margin: 5rem 0;
+    background-color: var(--color-darkred); }
+    @media (min-width: 1280px) {
+      .button-container .leave-room {
+        grid-area: button1;
+        width: 20%; } }
+  .button-container .start-listening {
+    width: 40rem;
+    margin: 5rem 0;
+    background-color: var(--color-green); }
+    @media (min-width: 1280px) {
+      .button-container .start-listening {
+        grid-area: button2; } }
