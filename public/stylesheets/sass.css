@@ -237,3 +237,15 @@ button {
     @media (min-width: 1280px) {
       .button-container .start-listening {
         grid-area: button; } }
+
+.nav {
+  position: relative;
+  display: flex;
+  justify-content: space-between; }
+  .nav .navbar {
+    display: flex;
+    justify-content: center; }
+  .nav .button-container .nav-button {
+    padding: 2rem;
+    background-color: black;
+    color: white; }

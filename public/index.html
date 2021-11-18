@@ -5,23 +5,28 @@
   <meta charset="utf-8"/>
   <title>Topick</title>
   <link rel="stylesheet" href="stylesheets/reset.css" />
-  <link rel="stylesheet" href="stylesheets/style.css">
-  <script async src="public/javascripts/main.js"></script>
+  <link rel="stylesheet" href="stylesheets/sass.css">
 </head>
 <body>
-  <h1>Topick</h1>
-  <nav>
-    <ul>
-      <li><a href="#">About<a>
+  <nav class="nav">
+    <img src="images/svg/Topick-Logo.svg" alt="Logo" class="logo" />
+    <ul class="navbar">
+      <li><a href="#">Home<a>
+      <li><a href="topics.html">Browse Topics</a></li>
       <li><a href="room.html">Chat Room<a></li>
       <li><a href="spotify.html">Spotify<a></li>
     <ul>
-  <nav>
+      <div class="button-container">
+        <li class="navbar-item"><a href="#" class="nav-button">Login</a></li>
+        <li class="navbar-item"><a href="topics.html" class="nav-button">Start chatting!</a></li>
+      </div>
+  </nav>
   <h2>Talk about anything with anyone from anywhere</h2>
+  <p>Create a topic to talk about and invite your friends! Or join someone else’s topic and start chatting!</p>
   <button onclick="homebFunc()">Start chatting!</button>
+  <script async src="javascripts/main.js"></script>
 </body>
 <footer>
   <small>&copy; 2021 Copyright Holder All Rights Reserved.</small>
-
 </footer>
 </html>
