@@ -16,6 +16,7 @@
         display: flex;
         justify-content: space-evenly;
         align-items: center;
+        flex-basis: 50%;
         gap: 5rem;
 
         .navbar-item {
@@ -46,6 +47,12 @@
             border: 1px solid black;
             border-radius: 2rem;
             color: black;
+            transition: all 0.5s ease-out;
+
+            &:hover {
+                background-color: black;
+                color: white;
+            }
         }
 
         .start-button {
@@ -55,7 +62,75 @@
             background-color: var(--color-green);
             padding: 0.5rem 0.75rem;
             border-radius: 2rem;
+
+            &:hover {
+                filter: brightness(1.5);
+            }
         }
     }
 }
 
+.hero {
+    font-family: Lora;
+    padding: 5rem 10rem;
+    height: 75vh;
+    position: relative;
+
+    &-header {
+        font-size: 6.4rem;
+        line-height: 8.2rem;
+        font-weight: bold;
+        width: 70%;
+        margin-bottom: 2rem;
+        position: relative;
+
+        .highlight {
+            display: inline-block;
+            line-height: 0rem;
+            padding-bottom: 2.75rem;
+            background-color: #43AA8B;
+        }
+    }
+    .subheader {
+        font-family: Nunito;
+        font-size: 2.4rem;
+        font-weight: var(--semibold-font);
+        width: 60%;
+        margin: 3rem 0;
+    }
+    
+    .hero-button {
+        background-color: var(--color-green);
+        border-radius: 2rem;
+        padding: 1.5rem 3.25rem;
+        font-size: 2rem;
+        color: white;
+        text-decoration: none;
+
+        &:hover {
+            filter: brightness(1.5);
+        }
+    }
+
+    .main-img {
+        position: absolute;
+        right: 10%;
+        top: 20%;
+        z-index: -1;
+    }
+
+    .second-img {
+        position: absolute;
+        right: 16%;
+        top: 5%;
+        z-index: -1;
+    }
+}
+
+footer {
+    background-color: black;
+    color: white;
+    display: flex;
+    place-content: center;
+    font-weight: var(--semibold-font);
+}

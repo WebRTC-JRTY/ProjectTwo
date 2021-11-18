@@ -72,7 +72,7 @@ html {
   font-size: 62.5%;
   line-height: 26px; }
 
-body .roomhtml {
+.roomhtml {
   background-color: var(--bg-color); }
 
 button {
@@ -142,17 +142,18 @@ button {
   .video-container-icon {
     position: relative;
     border: black 2px solid;
-    border-radius: 2rem; }
+    border-radius: 2rem;
+    overflow: hidden; }
     .video-container-icon .name {
       background-color: black;
       padding: 1rem 2rem;
       position: absolute;
-      bottom: 1rem;
+      bottom: 4rem;
       left: 1rem; }
     .video-container-icon #self {
-      width: 200px; }
+      width: 100%; }
     .video-container-icon .peer {
-      width: 200px; }
+      width: 100%; }
 
 .chat-container {
   display: flex;
@@ -255,6 +256,7 @@ button {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    flex-basis: 50%;
     gap: 5rem; }
     .nav .navbar .navbar-item {
       font-weight: var(--semibold-font);
@@ -277,7 +279,11 @@ button {
       padding: 0.5rem 1.5rem;
       border: 1px solid black;
       border-radius: 2rem;
-      color: black; }
+      color: black;
+      transition: all 0.5s ease-out; }
+      .nav .nav-button-container .nav-button:hover {
+        background-color: black;
+        color: white; }
     .nav .nav-button-container .start-button {
       font-weight: bold;
       text-decoration: none;
@@ -285,3 +291,55 @@ button {
       background-color: var(--color-green);
       padding: 0.5rem 0.75rem;
       border-radius: 2rem; }
+      .nav .nav-button-container .start-button:hover {
+        filter: brightness(1.5); }
+
+.hero {
+  font-family: Lora;
+  padding: 5rem 10rem;
+  height: 75vh;
+  position: relative; }
+  .hero-header {
+    font-size: 6.4rem;
+    line-height: 8.2rem;
+    font-weight: bold;
+    width: 70%;
+    margin-bottom: 2rem;
+    position: relative; }
+    .hero-header .highlight {
+      display: inline-block;
+      line-height: 0rem;
+      padding-bottom: 2.75rem;
+      background-color: #43AA8B; }
+  .hero .subheader {
+    font-family: Nunito;
+    font-size: 2.4rem;
+    font-weight: var(--semibold-font);
+    width: 60%;
+    margin: 3rem 0; }
+  .hero .hero-button {
+    background-color: var(--color-green);
+    border-radius: 2rem;
+    padding: 1.5rem 3.25rem;
+    font-size: 2rem;
+    color: white;
+    text-decoration: none; }
+    .hero .hero-button:hover {
+      filter: brightness(1.5); }
+  .hero .main-img {
+    position: absolute;
+    right: 10%;
+    top: 20%;
+    z-index: -1; }
+  .hero .second-img {
+    position: absolute;
+    right: 16%;
+    top: 5%;
+    z-index: -1; }
+
+footer {
+  background-color: black;
+  color: white;
+  display: flex;
+  place-content: center;
+  font-weight: var(--semibold-font); }
