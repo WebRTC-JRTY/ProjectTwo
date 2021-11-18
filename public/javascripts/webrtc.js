@@ -6,6 +6,7 @@ const $self = {
     audio: false,
     video: true,
   },
+  isHost: false,
 };
 
 requestUserMedia($self.constraints);
@@ -21,6 +22,8 @@ async function requestUserMedia(constraints) {
 const namespace = prepareNamespace(window.location.hash, true);
 
 const sc = io.connect("/" + namespace, { autoConnect: false });
+
+registerScEvents();
 
 // Socket IO Signaling Channel Events
 
@@ -79,9 +82,9 @@ chat_form.addEventListener("submit", handleChatForm);
 
 document.querySelector(".room-number").innerText = `#${namespace}`;
 function joinCall() {
-  sc.open();
   button.classList.add("leave");
   button.innerText = "Leave Room";
+  sc.open();
 }
 
 function leaveCall() {
