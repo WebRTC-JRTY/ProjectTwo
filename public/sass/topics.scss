@@ -1,45 +1,128 @@
 .choose-topics-container {
-    .title {
+    font-family: Lora;
+    padding: 3.5rem;
 
-    }
-    .view-all {
+    .title-wrapper {
+        display: flex;
 
-    }
+        .title {
+            font-weight: bold;
+            font-size: 3.6rem;
+        }
+        .view-all {
+            padding: 0.5rem;
+            background-color: inherit;
+            font-size: 1.8rem;
+            border: var(--border-default);
+            border-radius: 5px;
+            color: black;
+            cursor: pointer;
+            margin-left: 3rem;
+            transition: all 0.25s ease-in;
+    
+            &:hover {
+                color: white;
+                background-color: black;
+            }
+        }
+    } 
+}
+
+.topics-wrapper {
+    font-family: Lora;
+    display: flex;
+    color: white;
 
     .room {
-        .topic-title {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-darkgreen);
+        border-radius: 1rem;
+        margin-right: 3rem;
+        padding: 1.5rem;
 
+        .topic-title {
+            font-size: 2.4rem; 
+            font-weight: bold;
         }
 
         .people-count {
-
+            font-size: 1.8rem; 
+            font-weight: var(--medium-font);
         }
-        .join-room {
 
+        .join-room {
+            color: black;
+            background-color: white;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            font-size: 1.8rem;
+            place-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+
+            &:hover {
+                background-color: black;
+                color: white;
+            }
         }
     }
+}
 
-    .create-topic {
-        &__title {
+.inputs-wrapper {
+    display: flex;
+    padding: 3.5rem;
+    
+    h2 {
+        font-weight: bold;
+        font-size: 3.6rem;
+    }
 
+    .enter-topic {
+        margin: 3.5rem 0;
+        margin-right: 7.5rem;
+
+        .topic-input {
+            border-radius: 5px;
+            width: 50%;
         }
 
-        .enter-topic {
-            .topic-input {
+        .action-room {
+            color: white;
+            font-weight: var(--medium-font);
+            background-color: var(--color-darkgreen);
+            padding: 0.75rem 1rem;
+            width: 40%;
+            font-size: 1.6rem;
+            margin-left: 1rem;
+            cursor: pointer;
 
-            }
-
-            .action-room {
-
+            &:hover {
+                filter: brightness(1.5);
             }
         }
-        .idk-topic {
-            .idk-title {
+    }
+}
 
-            }
-            .idk {
-                
-            }
+.idk-topic {
+    padding: 3.5rem;
+
+    h2 {
+        font-weight: bold;
+        font-size: 3.6rem;
+    }
+    .idk-button {
+        margin-top: 2rem;
+        color: white;
+        font-weight: bold;
+        background-color: var(--color-darkgreen);
+        padding: 2rem 3rem;
+        font-size: 1.6rem;
+        cursor: pointer;
+
+        &:hover {
+            filter: brightness(1.5);
         }
     }
 }

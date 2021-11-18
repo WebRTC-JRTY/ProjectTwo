@@ -20,21 +20,12 @@ h2, h3 {
 
 
 input {
-  border: 0;
-  position: relative;
   overflow: hidden;
-  height: 30px;
-  width: 10%;
-  background-color: #fff;
-  padding: 0 20px;
-  border-radius: 10px;
+  height: 3rem;
 }
 
 button {
   color: white;
-  background-color: black;
-  height: 30px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  background-color: var(--color-darkgreen);
 }
 

@@ -344,3 +344,96 @@ footer {
   display: flex;
   place-content: center;
   font-weight: var(--semibold-font); }
+
+.choose-topics-container {
+  font-family: Lora;
+  padding: 3.5rem; }
+  .choose-topics-container .title-wrapper {
+    display: flex; }
+    .choose-topics-container .title-wrapper .title {
+      font-weight: bold;
+      font-size: 3.6rem; }
+    .choose-topics-container .title-wrapper .view-all {
+      padding: 0.5rem;
+      background-color: inherit;
+      font-size: 1.8rem;
+      border: var(--border-default);
+      border-radius: 5px;
+      color: black;
+      cursor: pointer;
+      margin-left: 3rem;
+      transition: all 0.25s ease-in; }
+      .choose-topics-container .title-wrapper .view-all:hover {
+        color: white;
+        background-color: black; }
+
+.topics-wrapper {
+  font-family: Lora;
+  display: flex;
+  color: white; }
+  .topics-wrapper .room {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-darkgreen);
+    border-radius: 1rem;
+    margin-right: 3rem;
+    padding: 1.5rem; }
+    .topics-wrapper .room .topic-title {
+      font-size: 2.4rem;
+      font-weight: bold; }
+    .topics-wrapper .room .people-count {
+      font-size: 1.8rem;
+      font-weight: var(--medium-font); }
+    .topics-wrapper .room .join-room {
+      color: black;
+      background-color: white;
+      border-radius: 1rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      font-size: 1.8rem;
+      place-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease-out; }
+      .topics-wrapper .room .join-room:hover {
+        background-color: black;
+        color: white; }
+
+.inputs-wrapper {
+  display: flex;
+  padding: 3.5rem; }
+  .inputs-wrapper h2 {
+    font-weight: bold;
+    font-size: 3.6rem; }
+  .inputs-wrapper .enter-topic {
+    margin: 3.5rem 0;
+    margin-right: 7.5rem; }
+    .inputs-wrapper .enter-topic .topic-input {
+      border-radius: 5px;
+      width: 50%; }
+    .inputs-wrapper .enter-topic .action-room {
+      color: white;
+      font-weight: var(--medium-font);
+      background-color: var(--color-darkgreen);
+      padding: 0.75rem 1rem;
+      width: 40%;
+      font-size: 1.6rem;
+      margin-left: 1rem;
+      cursor: pointer; }
+      .inputs-wrapper .enter-topic .action-room:hover {
+        filter: brightness(1.5); }
+
+.idk-topic {
+  padding: 3.5rem; }
+  .idk-topic h2 {
+    font-weight: bold;
+    font-size: 3.6rem; }
+  .idk-topic .idk-button {
+    margin-top: 2rem;
+    color: white;
+    font-weight: bold;
+    background-color: var(--color-darkgreen);
+    padding: 2rem 3rem;
+    font-size: 1.6rem;
+    cursor: pointer; }
+    .idk-topic .idk-button:hover {
+      filter: brightness(1.5); }
