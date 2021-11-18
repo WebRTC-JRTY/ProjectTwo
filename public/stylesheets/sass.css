@@ -242,6 +242,7 @@ button {
         grid-area: button; } }
 
 .nav {
+  background-color: white;
   position: relative;
   display: flex;
   justify-content: space-between;
