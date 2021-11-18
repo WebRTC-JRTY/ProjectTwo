@@ -1,0 +1,69 @@
+:root {
+    --primary-font: Nunito, sans-serif;
+    --secondary-font: Lora, sans-serif;
+    --semibold-font: 600;
+    --extrabold-font: 800;
+    --black-font: 900;
+}
+
+// --- Nunito ---
+@font-face {
+    font-family: Nunito;
+    src: url(../fonts/Nunito/Nunito-Regular.ttf);
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url(../fonts/Nunito/Nunito-SemiBold.ttf);
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url(../fonts/Nunito/Nunito-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url(../fonts/Nunito/Nunito-ExtraBold.ttf);
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url(../fonts/Nunito/Nunito-Black.ttf);
+    font-weight: 900;
+}
+
+// --- Lora ---
+@font-face {
+    font-family: Lora;
+    src: url(../fonts/Lora/Lora-Regular.ttf);
+}
+
+@font-face {
+    font-family: Lora;
+    src: url(../fonts/Lora/Lora-SemiBold.ttf);
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: Lora;
+    src: url(../fonts/Lora/Lora-Bold.ttf);
+    font-weight: bold;
+}
+
+
+@font-face {
+    font-family: Lora;
+    src: url(../fonts/Lora/Lora-ExtraBold.ttf);
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: Lora;
+    src: url(../fonts/Lora/Lora-Black.ttf);
+    font-weight: 900;
+}
