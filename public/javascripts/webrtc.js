@@ -75,7 +75,7 @@ async function handleRtcNegotiation() {
 
 function handleRtcDataChannel({ channel }) {
   console.log("Heard channel", channel.label, "with ID", channel.id);
-  document.querySelector("#peer").className = channel.label;
+  document.querySelector(".peer").className = channel.label;
 }
 
 function handleIceCandidate({ candidate }) {
@@ -86,7 +86,7 @@ function handleIceCandidate({ candidate }) {
 
 function handleRtcTrack({ track, streams: [stream] }) {
   // attach our track to the DOM
-  displayStream("#peer", stream);
+  displayStream(".peer", stream);
 }
 
 // Socket IO
@@ -101,16 +101,17 @@ registerScEvents();
 function registerScEvents() {
   sc.on("connect", handleScConnect);
   sc.on("connected peer", handleScConnectedPeer);
+  sc.on("signal", handleScSignal);
   sc.on("disconnected peer", handleScDisconnectedPeer);
 }
 
 function handleScConnect() {
   console.log("Connected to signaling channel!");
-  $self.isHost = true;
 }
 
 function handleScConnectedPeer() {
   console.log("Heard connected peer event!");
+  $self.isHost = true;
 }
 
 function handleScDisconnectedPeer() {
@@ -226,9 +227,12 @@ function joinCall() {
   button.classList.add("leave");
   button.innerText = "Leave Room";
   sc.open();
+  registerRtcEvents($peer);
+  establishCallFeatures($peer);
 }
 
 function leaveCall() {
+  resetCall($peer);
   button.classList.remove("leave");
   button.innerText = "Join Room";
   sc.close();
@@ -251,7 +255,7 @@ function resetAndRetryConnection(peer) {
   establishCallFeatures(peer);
 
   // Let the remote peer know we're resetting
-  if ($self.isPolite) {
+  if ($self.isHost) {
     sc.emit("signal", {
       description: {
         type: "_reset",

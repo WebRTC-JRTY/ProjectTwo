@@ -27,26 +27,16 @@ const namespaces = io.of(/^\/[a-z]{3}\-[a-z]{4}\-[a-z]{3}$/);
 
 namespaces.on("connection", function (socket) {
   const namespace = socket.nsp;
-  const peers = [];
 
-  for (let peer of namespace.sockets.keys()) {
-    peers.push(peer);
-  }
+  socket.broadcast.emit("connected peer");
 
-  // Send array of all peer IDs to new connector
-  socket.emit("connected peers", peers);
-
-  // Send new connector peer ID to all connected peers
-  socket.broadcast.emit("connected peer", socket.id);
-
-  // listen for and route signals
-  socket.on("signal", function ({ to, from, signal }) {
-    socket.to(to).emit("signal", { to, from, signal });
+  // listen for signals
+  socket.on("signal", (signal) => {
+    socket.broadcast.emit("signal", signal);
   });
-
   // listen for disconnects
-  socket.on("disconnect", function () {
-    namespace.emit("disconnected peer", socket.id);
+  socket.on("disconnect", () => {
+    namespace.emit("disconnected peer");
   });
 });
 
