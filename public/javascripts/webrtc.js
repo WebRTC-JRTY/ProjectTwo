@@ -81,6 +81,7 @@ function initializeSelfAndPeerById(id, hostness) {
 function establishCallFeatures(id) {
   registerRtcEvents(id);
   addStreamingMedia(id, $self.stream);
+  addChatChannel(id);
   if ($self.username) {
     shareUsername($self.username, id);
   }
@@ -293,6 +294,13 @@ function handleChatForm(e) {
   const message = input.value;
 
   appendMessage("self", message);
+
+  for (let peer in $peers) {
+    peer.chatChannel.send(message);
+  }
+
+  // Reset chat form when submit
+  input.value = "";
 }
 
 function handleUsernameForm(e) {
@@ -314,6 +322,14 @@ function appendMessage(sender, message) {
   li.className = sender;
 
   log.appendChild(li);
+  if (log.scrollTo) {
+    log.scrollTo({
+      top: log.scrollHeight,
+      behavior: "smooth",
+    });
+  } else {
+    log.scrollTop = log.scrollHeight;
+  }
 }
 
 function shareUsername(username, id) {
@@ -321,14 +337,31 @@ function shareUsername(username, id) {
   const udc = peer.connection.createDataChannel(`username-${username}`);
 }
 
+// Data Channels
+function addChatChannel(id) {
+  const peer = $peers[id];
+  peer.chatChannel = peer.connection.createDataChannel("chat", {
+    negotiated: true,
+    id: 50,
+  });
+  peer.chatChannel.onmessage = function ({ data }) {
+    appendMessage("peer", data);
+  };
+  peer.chatChannel.onclose = function ({ data }) {
+    console.log("Chat channel closed.");
+  };
+}
+
 // DOM Elements
 const button = document.querySelector(".call-button");
+const spotify = document.querySelector(".start-listening");
 const chat_form = document.querySelector(".chat-form");
 const username_form = document.querySelector("#username-form");
 
 button.addEventListener("click", handleButton);
 chat_form.addEventListener("submit", handleChatForm);
 username_form.addEventListener("submit", handleUsernameForm);
+spotify.addEventListener("click", startSpotify);
 
 document.querySelector(".room-number").innerText = `#${namespace}`;
 function joinCall() {
@@ -356,6 +389,10 @@ function resetCall(id, disconnect) {
     delete $self[id];
     delete $peers[id];
   }
+}
+
+function startSpotify() {
+  window.location.href = "spotify";
 }
 
 function resetAndRetryConnection(id) {
