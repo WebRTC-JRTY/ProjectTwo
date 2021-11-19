@@ -73,8 +73,9 @@ function initializeSelfAndPeerById(id, hostness) {
   };
 }
 
-function establishCallFeatures(peer) {
-  peer.connection.addTrack($self.stream.getTracks()[0], $self.stream);
+function establishCallFeatures(id) {
+  registerRtcEvents(id);
+  addStreamingMedia(id, $self.stream);
   peer.chatChannel = peer.connection.createDataChannel("chat", {
     negotiated: true,
     id: 50,
@@ -86,32 +87,37 @@ function establishCallFeatures(peer) {
 
 function registerRtcEvents(id) {
   const peer = $peers[id];
-  peer.connection.onnegotiationneeded = handleRtcNegotiation;
-  peer.connection.onicecandidate = handleIceCandidate;
-  peer.connection.ontrack = handleRtcTrack;
-  peer.connection.ondatachannel = handleRtcDataChannel;
+  peer.connection.onnegotiationneeded = handleRtcNegotiation(id);
+  peer.connection.onicecandidate = handleIceCandidate(id);
+  peer.connection.ontrack = handleRtcTrack(id);
+  peer.connection.ondatachannel = handleRtcDataChannel(id);
 }
 
-async function handleRtcNegotiation() {
-  // no offers made if suppressing
-  if ($self[id].isSuppressingInitialOffer) return;
-  console.log("RTC negotiation needed...");
-  // send SDP description
-  $self.isMakingOffer = true;
-  try {
-    // modern setLocalDescription
-    await $peer.connection.setLocalDescription();
-  } catch (e) {
-    // fallback for old browsers
-    const offer = await $peer.connection.createOffer();
-    await $peer.connection.setLocalDescription(offer);
-  } finally {
-    // ^...
-    sc.emit("signal", {
-      description: $peer.connection.localDescription,
-    });
-  }
-  $self.isMakingOffer = false;
+function handleRtcNegotiation(id) {
+  return async function () {
+    const peer = $peers[id];
+    // no offers made if suppressing
+    if ($self[id].isSuppressingInitialOffer) return;
+    console.log("RTC negotiation needed...");
+    // send SDP description
+    $self[id].isMakingOffer = true;
+    try {
+      // modern setLocalDescription
+      await $peer.connection.setLocalDescription();
+    } catch (e) {
+      // fallback for old browsers
+      const offer = await $peer.connection.createOffer();
+      await $peer.connection.setLocalDescription(offer);
+    } finally {
+      // ^...
+      sc.emit("signal", {
+        to: id,
+        from: $self.id,
+        signal: { description: $peer.connection.localDescription },
+      });
+      $self[id].isMakingOffer = false;
+    }
+  };
 }
 
 function handleRtcDataChannel({ channel }) {
@@ -119,12 +125,14 @@ function handleRtcDataChannel({ channel }) {
   document.querySelector(".peer").className = channel.label;
 }
 
-function handleIceCandidate({ candidate }) {
-  sc.emit("signal", {
-    to: id,
-    from: $self.id,
-    signal: { candidate: candidate },
-  });
+function handleIceCandidate(id) {
+  return function ({ candidate }) {
+    sc.emit("signal", {
+      to: id,
+      from: $self.id,
+      signal: { candidate: candidate },
+    });
+  };
 }
 
 function handleRtcConnectionStateChange(id) {
@@ -134,9 +142,12 @@ function handleRtcConnectionStateChange(id) {
   };
 }
 
-function handleRtcTrack({ track, streams: [stream] }) {
-  // attach our track to the DOM
-  displayStream(".peer", stream);
+function handleRtcTrack(id) {
+  return function ({ track, streams: [stream] }) {
+    console.log("Attempt to display media from peer...");
+    // attach our track to the DOM
+    displayStream(`#peer-${id}`, stream);
+  };
 }
 
 // Socket IO
@@ -286,15 +297,12 @@ function joinCall() {
   button.classList.add("leave");
   button.innerText = "Leave Room";
   sc.open();
-  registerRtcEvents($peer);
-  establishCallFeatures($peer);
 }
 
 function leaveCall() {
   button.classList.remove("leave");
   button.innerText = "Join Room";
   sc.close();
-  resetCall($peer);
 }
 
 function resetCall(peer) {
