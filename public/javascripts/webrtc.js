@@ -81,13 +81,9 @@ function initializeSelfAndPeerById(id, hostness) {
 function establishCallFeatures(id) {
   registerRtcEvents(id);
   addStreamingMedia(id, $self.stream);
-  // peer.chatChannel = peer.connection.createDataChannel("chat", {
-  //   negotiated: true,
-  //   id: 50,
-  // });
-  // peer.chatChannel.onmessage = function ({ data }) {
-  //   appendMessage("peer", data);
-  // };
+  if ($self.username) {
+    shareUsername($self.username, id);
+  }
 }
 
 function registerRtcEvents(id) {
@@ -125,7 +121,7 @@ function handleRtcNegotiation(id) {
   };
 }
 
-function handleRtcDataChannel({ channel }) {
+function handleRtcDataChannel(id) {
   return function ({ channel }) {
     const label = channel.label;
     console.log(`Data channel added for ${label}`);
@@ -305,6 +301,10 @@ function handleUsernameForm(e) {
   const username = form.querySelector("#username-input").value;
   const figcaption = document.querySelector(".name");
   figcaption.innerText = username;
+  $self.username = username;
+  for (let id in $peers) {
+    shareUsername(username, id);
+  }
 }
 
 function appendMessage(sender, message) {
@@ -314,6 +314,11 @@ function appendMessage(sender, message) {
   li.className = sender;
 
   log.appendChild(li);
+}
+
+function shareUsername(username, id) {
+  const peer = $peers[id];
+  const udc = peer.connection.createDataChannel(`username-${username}`);
 }
 
 // DOM Elements
