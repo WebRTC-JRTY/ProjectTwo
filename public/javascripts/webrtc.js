@@ -24,7 +24,7 @@ async function requestUserMedia(constraints) {
 function createVideoElement(id) {
   const figure = document.createElement("figure");
   const figcaption = document.createElement("figcaption");
-  const video = documnent.createElement("video");
+  const video = document.createElement("video");
 
   const video_attrs = {
     autoplay: "",
@@ -32,20 +32,22 @@ function createVideoElement(id) {
     poster: "images/placeholder.png",
   };
   figcaption.innerText = id;
-  for (let attrs in video_attrs) {
+  for (let attr in video_attrs) {
     video.setAttribute(attr, video_attrs[attr]);
   }
+  figure.id = id;
   figure.appendChild(video);
   figure.appendChild(figcaption);
   return figure;
 }
 
 function displayStream(selector, stream) {
-  const videoElement = document.querySelector(selector);
+  let videoElement = document.querySelector(selector);
   if (!videoElement) {
     let id = selector.split("#peer-")[1];
     videoElement = createVideoElement(id);
   }
+  document.querySelector("#videos").appendChild(videoElement);
   let video = videoElement.querySelector("video");
   video.srcObject = stream;
 }
@@ -103,17 +105,17 @@ function handleRtcNegotiation(id) {
     $self[id].isMakingOffer = true;
     try {
       // modern setLocalDescription
-      await $peer.connection.setLocalDescription();
+      await peer.connection.setLocalDescription();
     } catch (e) {
       // fallback for old browsers
-      const offer = await $peer.connection.createOffer();
-      await $peer.connection.setLocalDescription(offer);
+      const offer = await peer.connection.createOffer();
+      await peer.connection.setLocalDescription(offer);
     } finally {
       // ^...
       sc.emit("signal", {
         to: id,
         from: $self.id,
-        signal: { description: $peer.connection.localDescription },
+        signal: { description: peer.connection.localDescription },
       });
       $self[id].isMakingOffer = false;
     }
@@ -191,8 +193,10 @@ function handleScDisconnectedPeer(id) {
   console.log("Disconnected peer ID:", id);
 }
 
-async function handleScSignal({ description, candidate }) {
+async function handleScSignal({ from, signal: { description, candidate } }) {
   console.log("Heard signal event!");
+  const id = from;
+  const peer = $peers[id];
   if (description) {
     console.log("Received SDP Signal:", description);
 
@@ -202,44 +206,44 @@ async function handleScSignal({ description, candidate }) {
     }
 
     const readyForOffer =
-      !$self.isMakingOffer &&
-      ($peer.connection.signalingState === "stable" ||
-        $self.isSettingRemoteAnswerPending);
+      !$self[id].isMakingOffer &&
+      (peer.connection.signalingState === "stable" ||
+        $self[id].isSettingRemoteAnswerPending);
 
     const offerCollision = description.type === "offer" && !readyForOffer;
 
-    $self.isIgnoringOffer = !$self.isHost && offerCollision;
+    $self[id].isIgnoringOffer = !$self[id].isHost && offerCollision;
 
-    if ($self.isIgnoringOffer) return;
+    if ($self[id].isIgnoringOffer) return;
 
-    $self.isSettingRemoteAnswerPending = description.type === "answer";
+    $self[id].isSettingRemoteAnswerPending = description.type === "answer";
     console.log(
       "Signaling state on incoming description:",
-      $peer.connection.signalingState
+      peer.connection.signalingState
     );
     try {
-      await $peer.connection.setRemoteDescription(description);
+      await peer.connection.setRemoteDescription(description);
     } catch (e) {
       // if we cant setRemoteDescription, then reset
-      resetAndRetryConnection($peer);
+      resetAndRetryConnection(peer);
       return;
     }
 
     if (description.type === "offer") {
       try {
         // modern setLocalDescription
-        await $peer.connection.setLocalDescription();
+        await peer.connection.setLocalDescription();
       } catch (e) {
         // fallback for old browsers
-        const answer = await $peer.connection.createAnswer();
-        await $peer.connection.setLocalDescription(offer);
+        const answer = await peer.connection.createAnswer();
+        await peer.connection.setLocalDescription(offer);
       } finally {
         // ^...
         sc.emit("signal", {
-          description: $peer.connection.localDescription,
+          description: peer.connection.localDescription,
         });
         // host does'nt have to suppress initial offers
-        $self.isSuppressingInitialOffer = false;
+        $self[id].isSuppressingInitialOffer = false;
       }
     } else if (candidate) {
       console.log("Receieved ICE candidate:", candidate);
@@ -248,9 +252,9 @@ async function handleScSignal({ description, candidate }) {
     console.log("Received ICE candidate:", candidate);
 
     try {
-      await $peer.connection.addIceCandidate(candidate);
+      await peer.connection.addIceCandidate(candidate);
     } catch (e) {
-      if (!$self.isIgnoringOffer) {
+      if (!$self[id].isIgnoringOffer) {
         console.error("Cannot add ICE candidadte for peer", e);
       }
     }

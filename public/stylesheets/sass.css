@@ -92,6 +92,15 @@ button {
 .leave {
   background-color: var(--color-darkred); }
 
+video {
+  width: 20rem; }
+
+#self {
+  width: 100%; }
+
+#peer {
+  width: 100%; }
+
 .layout {
   margin: 4rem;
   display: flex;
@@ -159,10 +168,6 @@ button {
       position: absolute;
       bottom: 4rem;
       left: 1rem; }
-    .video-container-icon #self {
-      width: 100%; }
-    .video-container-icon .peer {
-      width: 100%; }
 
 .chat-container {
   display: flex;
