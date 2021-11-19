@@ -354,6 +354,7 @@ function addChatChannel(id) {
 
 // DOM Elements
 const button = document.querySelector(".call-button");
+const leave = document.querySelector(".leave");
 const spotify = document.querySelector(".start-listening");
 const chat_form = document.querySelector(".chat-form");
 const username_form = document.querySelector("#username-form");
@@ -362,6 +363,7 @@ button.addEventListener("click", handleButton);
 chat_form.addEventListener("submit", handleChatForm);
 username_form.addEventListener("submit", handleUsernameForm);
 spotify.addEventListener("click", startSpotify);
+leave.addEventListener("click", leaveMeeting);
 
 document.querySelector(".room-number").innerText = `#${namespace}`;
 function joinCall() {
@@ -377,6 +379,10 @@ function leaveCall() {
   for (let id in $peers) {
     resetCall(id, true);
   }
+}
+
+function leaveMeeting() {
+  window.location.href = "/";
 }
 
 function resetCall(id, disconnect) {
