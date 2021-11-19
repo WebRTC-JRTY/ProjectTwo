@@ -7,15 +7,9 @@ const $self = {
     audio: false,
     video: true,
   },
-  isHost: false,
-  isMakingOffer: false,
-  isIgnoringOffer: false,
-  isSettingRemoteAnswerPending: false,
 };
 
-const $peer = {
-  connection: new RTCPeerConnection($self.rtcConfig),
-};
+const $peers = {};
 
 requestUserMedia($self.constraints);
 
@@ -101,24 +95,27 @@ registerScEvents();
 function registerScEvents() {
   sc.on("connect", handleScConnect);
   sc.on("connected peer", handleScConnectedPeer);
+  sc.on("connected peers", handleScConnectedPeers);
   sc.on("signal", handleScSignal);
   sc.on("disconnected peer", handleScDisconnectedPeer);
 }
 
 function handleScConnect() {
-  console.log("Connected to signaling channel!");
+  console.log("Successfully connected to signaling channel!");
+  $self.id = sc.id;
+  console.log(`Self ID: ${$self.id}`);
 }
 
-function handleScConnectedPeer() {
-  console.log("Heard connected peer event!");
-  $self.isHost = true;
+function handleScConnectedPeer(id) {
+  console.log("Connected peer ID:", id);
 }
 
-function handleScDisconnectedPeer() {
-  console.log("Heard disconnected peer event!");
-  resetCall($peer);
-  registerRtcEvents($peer);
-  establishCallFeatures($peer);
+function handleScConnectedPeers(ids) {
+  console.log(`Connected peer IDs: ${ids.join(", ")}`);
+}
+
+function handleScDisconnectedPeer(id) {
+  console.log("Disconnected peer ID:", id);
 }
 
 async function handleScSignal({ description, candidate }) {
@@ -232,10 +229,10 @@ function joinCall() {
 }
 
 function leaveCall() {
-  resetCall($peer);
   button.classList.remove("leave");
   button.innerText = "Join Room";
   sc.close();
+  resetCall($peer);
 }
 
 function resetCall(peer) {
