@@ -21,9 +21,41 @@ async function requestUserMedia(constraints) {
 }
 
 // User-Media/DOM
+function createVideoElement(id) {
+  const figure = document.createElement("figure");
+  const figcaption = document.createElement("figcaption");
+  const video = documnent.createElement("video");
+
+  const video_attrs = {
+    autoplay: "",
+    playsinline: "",
+    poster: "images/placeholder.png",
+  };
+  figcaption.innerText = id;
+  for (let attrs in video_attrs) {
+    video.setAttribute(attr, video_attrs[attr]);
+  }
+  figure.appendChild(video);
+  figure.appendChild(figcaption);
+  return figure;
+}
+
 function displayStream(selector, stream) {
-  const video = document.querySelector(selector);
+  const videoElement = document.querySelector(selector);
+  if (!videoElement) {
+    let id = selector.split("#peer-")[1];
+    videoElement = createVideoElement(id);
+  }
+  let video = videoElement.querySelector("video");
   video.srcObject = stream;
+}
+
+function addStreamingMedia(peer, stream) {
+  if (stream) {
+    for (let track of stream.getTracks()) {
+      peer.connection.addTrack(track, stream);
+    }
+  }
 }
 
 // WebRTC Events
