@@ -78,13 +78,13 @@ function initializeSelfAndPeerById(id, hostness) {
 function establishCallFeatures(id) {
   registerRtcEvents(id);
   addStreamingMedia(id, $self.stream);
-  peer.chatChannel = peer.connection.createDataChannel("chat", {
-    negotiated: true,
-    id: 50,
-  });
-  peer.chatChannel.onmessage = function ({ data }) {
-    appendMessage("peer", data);
-  };
+  // peer.chatChannel = peer.connection.createDataChannel("chat", {
+  //   negotiated: true,
+  //   id: 50,
+  // });
+  // peer.chatChannel.onmessage = function ({ data }) {
+  //   appendMessage("peer", data);
+  // };
 }
 
 function registerRtcEvents(id) {
@@ -123,8 +123,17 @@ function handleRtcNegotiation(id) {
 }
 
 function handleRtcDataChannel({ channel }) {
-  console.log("Heard channel", channel.label, "with ID", channel.id);
-  document.querySelector(".peer").className = channel.label;
+  return function ({ channel }) {
+    const label = channel.label;
+    console.log(`Data channel added for ${label}`);
+    if (label.startsWith("username-")) {
+      document.querySelector(`#peer-${id} figcaption`).innerText =
+        label.split("username-")[1];
+      channel.onopen = function () {
+        channel.close();
+      };
+    }
+  };
 }
 
 function handleIceCandidate(id) {
@@ -184,8 +193,10 @@ function handleScConnectedPeer(id) {
 function handleScConnectedPeers(ids) {
   console.log(`Connected peer IDs: ${ids.join(", ")}`);
   for (let id of ids) {
-    initializeSelfAndPeerById(id, true);
-    establishCallFeatures(id);
+    if (id !== $self.id) {
+      initializeSelfAndPeerById(id, true);
+      establishCallFeatures(id);
+    }
   }
 }
 
@@ -240,7 +251,11 @@ async function handleScSignal({ from, signal: { description, candidate } }) {
       } finally {
         // ^...
         sc.emit("signal", {
-          description: peer.connection.localDescription,
+          to: id,
+          from: $self.id,
+          signal: {
+            description: peer.connection.localDescription,
+          },
         });
         // host does'nt have to suppress initial offers
         $self[id].isSuppressingInitialOffer = false;
