@@ -59,6 +59,19 @@ function addStreamingMedia(peer, stream) {
 }
 
 // WebRTC Events
+
+function initializeSelfAndPeerById(id, hostness) {
+  $self[id] = {
+    isHost: hostness,
+    isMakingOffer: false,
+    isIgnoringOffer: false,
+    isSettingRemoteAnswerPending: false,
+  };
+  $peers[id] = {
+    connection: new RTCPeerConnection($self.rtcConfig),
+  };
+}
+
 function establishCallFeatures(peer) {
   peer.connection.addTrack($self.stream.getTracks()[0], $self.stream);
   peer.chatChannel = peer.connection.createDataChannel("chat", {
@@ -70,7 +83,8 @@ function establishCallFeatures(peer) {
   };
 }
 
-function registerRtcEvents(peer) {
+function registerRtcEvents(id) {
+  const peer = $peers[id];
   peer.connection.onnegotiationneeded = handleRtcNegotiation;
   peer.connection.onicecandidate = handleIceCandidate;
   peer.connection.ontrack = handleRtcTrack;
@@ -79,7 +93,7 @@ function registerRtcEvents(peer) {
 
 async function handleRtcNegotiation() {
   // no offers made if suppressing
-  if ($self.isSuppressingInitialOffer) return;
+  if ($self[id].isSuppressingInitialOffer) return;
   console.log("RTC negotiation needed...");
   // send SDP description
   $self.isMakingOffer = true;
@@ -106,8 +120,17 @@ function handleRtcDataChannel({ channel }) {
 
 function handleIceCandidate({ candidate }) {
   sc.emit("signal", {
-    candidate: candidate,
+    to: id,
+    from: $self.id,
+    signal: { candidate: candidate },
   });
+}
+
+function handleRtcConnectionStateChange(id) {
+  return function () {
+    const connectionState = $peers[id].connection.connectionState;
+    document.querySelector(`#peer-${id}`).className = connectionState;
+  };
 }
 
 function handleRtcTrack({ track, streams: [stream] }) {
@@ -140,10 +163,14 @@ function handleScConnect() {
 
 function handleScConnectedPeer(id) {
   console.log("Connected peer ID:", id);
+  initializeSelfAndPeerById(id, false);
 }
 
 function handleScConnectedPeers(ids) {
   console.log(`Connected peer IDs: ${ids.join(", ")}`);
+  for (let id of ids) {
+    initializeSelfAndPeerById(id, true);
+  }
 }
 
 function handleScDisconnectedPeer(id) {
