@@ -26,7 +26,15 @@
             muted
             playsinline
           ></video>
-          <figcaption class="name">You</figcaption>
+          <figcaption class="name">
+            <form id="username-form">
+              <label for="username-input" class="preserve-access">
+                Enter Username
+              </label>
+              <input type="text" id="username-input" placeholder="Username" />
+              <button type="submit" id="username-set-btn">Set Username</button>
+            </form>
+          </figcaption>
         </figure>
       </article>
       <article class="chat-container">

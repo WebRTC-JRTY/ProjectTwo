@@ -299,6 +299,14 @@ function handleChatForm(e) {
   appendMessage("self", message);
 }
 
+function handleUsernameForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const username = form.querySelector("#username-input").value;
+  const figcaption = document.querySelector(".name");
+  figcaption.innerText = username;
+}
+
 function appendMessage(sender, message) {
   const log = document.querySelector(".chat");
   const li = document.createElement("li");
@@ -311,9 +319,11 @@ function appendMessage(sender, message) {
 // DOM Elements
 const button = document.querySelector(".call-button");
 const chat_form = document.querySelector(".chat-form");
+const username_form = document.querySelector("#username-form");
 
 button.addEventListener("click", handleButton);
 chat_form.addEventListener("submit", handleChatForm);
+username_form.addEventListener("submit", handleUsernameForm);
 
 document.querySelector(".room-number").innerText = `#${namespace}`;
 function joinCall() {
