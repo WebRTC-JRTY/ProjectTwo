@@ -18,6 +18,11 @@ html {
     background-color: var(--bg-color);
 }
 
+.preserve-access {
+    position: absolute;
+    left: -20000px;
+}
+
 button {
     font-size: 2.4rem;
     border-radius: 1rem;
@@ -38,6 +43,18 @@ button {
 
 .leave {
     background-color: var(--color-darkred);
+}
+
+video {
+    width: 100%;
+}
+
+#self {
+    width: 100%;
+}
+
+#peer {
+    width: 100%;
 }
 
 .layout {
@@ -106,12 +123,10 @@ button {
         grid-area: video;
         font-size: 2.4rem;
         width: auto;
-        grid-template-columns: repeat(3, minmax(10px, 1fr));
     }
 
     &-icon {
         position: relative;
-        border: black 2px solid;
         border-radius: 2rem;
         overflow: hidden;
 
@@ -119,16 +134,28 @@ button {
             background-color: black;
             padding: 1rem 2rem;
             position: absolute;
-            bottom: 4rem;
-            left: 1rem;
-        }
+            bottom: 1rem;
+            display: flex;
+            #username-form {
+                display: flex;
+                #username-input {
+                    border: 1px solid black;
+                    background-color: inherit;
+                    color: #EEE;
+                }
+    
+                #username-set-btn {
+                    padding: 1rem;
+                    font-size: 1.4rem;
+                    margin-left: 0.5rem;
+                    border-radius: 0;
+                    background-color: white;
+                    color: black;
 
-        #self {
-            width: 100%;
-        }
-
-        .peer {
-            width: 100%;
+                    &:hover {
+                    }
+                }
+            }            
         }
     }
 }
@@ -173,7 +200,6 @@ button {
             font-size: 2.4rem;
         }
         &-message {
-
             .person-name {
                 font-weight: bold;
             }

@@ -17,9 +17,8 @@
       <span class="room">Room: <span class="room-number">323131</span></span>
       <h1 class="header">Topic: <span>Marvel vs DC Movies</span></h1>
       <h2 class="subtitle">Participants</h2>
-      <div class="video-container">
-        <div class="video-container-icon">
-          <label for="" class="name"> You </label>
+      <article id="videos" class="video-container">
+        <figure class="video-container-icon">
           <video
             id="self"
             poster="images/placeholder.png"
@@ -27,42 +26,21 @@
             muted
             playsinline
           ></video>
-        </div>
-        <div class="video-container-icon">
-          <label for="" class="name"> John</label>
-          <video
-            class="peer"
-            poster="images/placeholder.png"
-            autoplay
-            muted
-            playsinline
-          ></video>
-        </div>
-        <div class="video-container-icon">
-          <label for="" class="name"> Julie</label>
-          <video
-            class="peer"
-            poster="images/placeholder.png"
-            autoplay
-            muted
-            playsinline
-          ></video>
-        </div>
-        <div class="video-container-icon">
-          <label for="" class="name"> Jessica</label>
-          <video
-            class="peer"
-            poster="images/placeholder.png"
-            autoplay
-            muted
-            playsinline
-          ></video>
-        </div>
-      </div>
-      <div class="chat-container">
+          <figcaption class="name">
+            <form id="username-form">
+              <label for="username-input" class="preserve-access">
+                Enter Username
+              </label>
+              <input type="text" id="username-input" placeholder="Username" />
+              <button type="submit" id="username-set-btn">Set Username</button>
+            </form>
+          </figcaption>
+        </figure>
+      </article>
+      <article class="chat-container">
         <h2 class="chat-title">Group Chat</h2>
         <h3 class="topic-title">Marvel vs DC Movies</h3>
-        <form action="#" class="chat-form">
+        <form class="chat-form">
           <ul class="chat">
             <li class="chat-message">
               <span class="person-name"> Julie:</span> I love this topic!
@@ -77,8 +55,9 @@
             <button type="submit" class="send">Send</button>
           </div>
         </form>
-      </div>
+      </article>
       <div class="button-container">
+        <button class="leave">Leave Meeting</button>
         <button class="call-button join">Join Room</button>
         <button class="start-listening">Start a listening session ➡</button>
       </div>
