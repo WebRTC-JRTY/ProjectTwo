@@ -35,7 +35,7 @@ function createVideoElement(id) {
   for (let attr in video_attrs) {
     video.setAttribute(attr, video_attrs[attr]);
   }
-  figure.id = id;
+  figure.id = `peer-${id}`;
   figure.appendChild(video);
   figure.appendChild(figcaption);
   return figure;
@@ -202,6 +202,7 @@ function handleScConnectedPeers(ids) {
 
 function handleScDisconnectedPeer(id) {
   console.log("Disconnected peer ID:", id);
+  resetCall(id, true);
 }
 
 async function handleScSignal({ from, signal: { description, candidate } }) {
@@ -322,11 +323,21 @@ function leaveCall() {
   button.classList.remove("leave");
   button.innerText = "Join Room";
   sc.close();
+  for (let id in $peers) {
+    resetCall(id, true);
+  }
 }
 
-function resetCall(peer) {
-  $peer.connection.close();
-  $peer.connection = new RTCPeerConnection($self.rtcConfig);
+function resetCall(id, disconnect) {
+  const peer = $peers[id];
+  const videoSelector = `#peer-${id}`;
+  displayStream(`#peer-${id}`, null);
+  peer.connection.close();
+  if (disconnect) {
+    document.querySelector(videoSelector).remove();
+    delete $self[id];
+    delete $peers[id];
+  }
 }
 
 function resetAndRetryConnection(peer) {
