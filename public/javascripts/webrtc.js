@@ -32,12 +32,14 @@ function createVideoElement(id) {
     poster: "images/placeholder.png",
   };
   figcaption.innerText = id;
+  figcaption.className = "name";
   for (let attr in video_attrs) {
     video.setAttribute(attr, video_attrs[attr]);
   }
   figure.id = `peer-${id}`;
   figure.appendChild(video);
   figure.appendChild(figcaption);
+  figure.classList.add("video-container-icon");
   return figure;
 }
 
@@ -49,6 +51,7 @@ function displayStream(selector, stream) {
   }
   document.querySelector("#videos").appendChild(videoElement);
   let video = videoElement.querySelector("video");
+  video.id = "self";
   video.srcObject = stream;
 }
 

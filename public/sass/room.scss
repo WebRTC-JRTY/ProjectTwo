@@ -41,7 +41,7 @@ button {
 }
 
 video {
-    width:20rem;
+    width: 100%;
 }
 
 #self {
@@ -118,12 +118,10 @@ video {
         grid-area: video;
         font-size: 2.4rem;
         width: auto;
-        grid-template-columns: repeat(3, minmax(10px, 1fr));
     }
 
     &-icon {
         position: relative;
-        border: black 2px solid;
         border-radius: 2rem;
         overflow: hidden;
 
@@ -131,8 +129,7 @@ video {
             background-color: black;
             padding: 1rem 2rem;
             position: absolute;
-            bottom: 4rem;
-            left: 1rem;
+            bottom: 1rem;
         }
     }
 }

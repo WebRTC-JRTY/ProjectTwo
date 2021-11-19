@@ -93,7 +93,7 @@ button {
   background-color: var(--color-darkred); }
 
 video {
-  width: 20rem; }
+  width: 100%; }
 
 #self {
   width: 100%; }
@@ -155,19 +155,16 @@ video {
     .video-container {
       grid-area: video;
       font-size: 2.4rem;
-      width: auto;
-      grid-template-columns: repeat(3, minmax(10px, 1fr)); } }
+      width: auto; } }
   .video-container-icon {
     position: relative;
-    border: black 2px solid;
     border-radius: 2rem;
     overflow: hidden; }
     .video-container-icon .name {
       background-color: black;
       padding: 1rem 2rem;
       position: absolute;
-      bottom: 4rem;
-      left: 1rem; }
+      bottom: 1rem; }
 
 .chat-container {
   display: flex;
