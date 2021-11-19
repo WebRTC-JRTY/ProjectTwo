@@ -50,7 +50,8 @@ function displayStream(selector, stream) {
   video.srcObject = stream;
 }
 
-function addStreamingMedia(peer, stream) {
+function addStreamingMedia(id, stream) {
+  const peer = $peers[id];
   if (stream) {
     for (let track of stream.getTracks()) {
       peer.connection.addTrack(track, stream);
@@ -164,12 +165,14 @@ function handleScConnect() {
 function handleScConnectedPeer(id) {
   console.log("Connected peer ID:", id);
   initializeSelfAndPeerById(id, false);
+  establishCallFeatures(id);
 }
 
 function handleScConnectedPeers(ids) {
   console.log(`Connected peer IDs: ${ids.join(", ")}`);
   for (let id of ids) {
     initializeSelfAndPeerById(id, true);
+    establishCallFeatures(id);
   }
 }
 
