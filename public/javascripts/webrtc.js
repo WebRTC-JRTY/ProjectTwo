@@ -213,7 +213,7 @@ async function handleScSignal({ from, signal: { description, candidate } }) {
     console.log("Received SDP Signal:", description);
 
     if (description.type === "_reset") {
-      resetAndRetryConnection();
+      resetAndRetryConnection(id);
       return;
     }
 
@@ -237,7 +237,7 @@ async function handleScSignal({ from, signal: { description, candidate } }) {
       await peer.connection.setRemoteDescription(description);
     } catch (e) {
       // if we cant setRemoteDescription, then reset
-      resetAndRetryConnection(peer);
+      resetAndRetryConnection(id);
       return;
     }
 
@@ -340,22 +340,24 @@ function resetCall(id, disconnect) {
   }
 }
 
-function resetAndRetryConnection(peer) {
-  resetCall(peer);
-  $self.isMakingOffer = false;
-  $self.isIgnoringOffer = false;
-  $self.isSettingRemoteAnswerPending = false;
+function resetAndRetryConnection(id) {
+  const isHost = $self[id].isHost;
+  // host peer suppresses initial offer
+  resetCall(id, false);
+  initializeSelfAndPeerById(id, isHost);
+  $self[id].isSuppressingInitialOffer = isHost;
 
-  // host peer suprpresses initial offer
-  $self.isSuppressingInitialOffer = $self.isHost;
-  registerRtcEvents(peer);
-  establishCallFeatures(peer);
+  establishCallFeatures(id);
 
   // Let the remote peer know we're resetting
-  if ($self.isHost) {
+  if (isHost) {
     sc.emit("signal", {
-      description: {
-        type: "_reset",
+      to: id,
+      from: $self.id,
+      signal: {
+        description: {
+          type: "_reset",
+        },
       },
     });
   }
@@ -373,7 +375,11 @@ async function handleFallbackRtc(offerType) {
   } finally {
     // ^...
     sc.emit("signal", {
-      description: $peer.connection.localDescription,
+      to: id,
+      from: $self.id,
+      signal: {
+        description: $peer.connection.localDescription,
+      },
     });
   }
 }
