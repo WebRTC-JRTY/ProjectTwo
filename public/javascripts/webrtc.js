@@ -1,5 +1,8 @@
 "use strict";
 
+const TEXT_CHAT = "textChat";
+const VIDEO_CHAT = "videoChat";
+
 // Self and Peer Objects
 const $self = {
   rtcConfig: null,
@@ -7,9 +10,18 @@ const $self = {
     audio: false,
     video: true,
   },
+  [VIDEO_CHAT]:{
+
+  },
+
+  [TEXT_CHAT]:{
+  },
 };
 
-const $peers = {};
+const $peers = {
+  [VIDEO_CHAT]:{},
+  [TEXT_CHAT]:{},
+};
 
 requestUserMedia($self.constraints);
 
@@ -56,7 +68,7 @@ function displayStream(selector, stream) {
 }
 
 function addStreamingMedia(id, stream) {
-  const peer = $peers[id];
+  const peer = $peers[VIDEO_CHAT][id];
   if (stream) {
     for (let track of stream.getTracks()) {
       peer.connection.addTrack(track, stream);
@@ -66,20 +78,20 @@ function addStreamingMedia(id, stream) {
 
 // WebRTC Events
 
-function initializeSelfAndPeerById(id, hostness) {
-  $self[id] = {
+function initializeSelfAndPeerById(type, id, hostness) {
+  $self[type][id] = {
     isHost: hostness,
     isMakingOffer: false,
     isIgnoringOffer: false,
     isSettingRemoteAnswerPending: false,
   };
-  $peers[id] = {
+  $peers[type][id] = {
     connection: new RTCPeerConnection($self.rtcConfig),
   };
 }
 
 function establishCallFeatures(id) {
-  registerRtcEvents(id);
+  registerRtcEvents(VIDEO_CHAT, id);
   addStreamingMedia(id, $self.stream);
   addChatChannel(id);
   if ($self.username) {
@@ -87,22 +99,26 @@ function establishCallFeatures(id) {
   }
 }
 
-function registerRtcEvents(id) {
-  const peer = $peers[id];
-  peer.connection.onnegotiationneeded = handleRtcNegotiation(id);
-  peer.connection.onicecandidate = handleIceCandidate(id);
-  peer.connection.ontrack = handleRtcTrack(id);
-  peer.connection.ondatachannel = handleRtcDataChannel(id);
+function registerRtcEvents(type, id, handleRtcDataChannel) {
+  const peer = $peers[type][id];
+  peer.connection.onnegotiationneeded = () => handleRtcNegotiation(type, id);
+  peer.connection.onicecandidate = ({ candidate}) => handleIceCandidate(type, id, candidate);
+  if(type === VIDEO_CHAT){
+    peer.connection.ontrack = handleRtcTrack(id);
+  }else{
+    peer.connection.ondatachannel = ({channel}) => handleRtcDataChannel(type, id, chanel);;
+  }
 }
 
-function handleRtcNegotiation(id) {
+function handleRtcNegotiation(type, id) {
   return async function () {
-    const peer = $peers[id];
+    const myself = $self[type][id]
+    const peer = $peers[type][id];
     // no offers made if suppressing
     if ($self[id].isSuppressingInitialOffer) return;
     console.log("RTC negotiation needed...");
     // send SDP description
-    $self[id].isMakingOffer = true;
+    myself.isMakingOffer = true;
     try {
       // modern setLocalDescription
       await peer.connection.setLocalDescription();
@@ -113,11 +129,11 @@ function handleRtcNegotiation(id) {
     } finally {
       // ^...
       sc.emit("signal", {
-        to: id,
+        to: id, type,
         from: $self.id,
-        signal: { description: peer.connection.localDescription },
+        description: peer.connection.localDescription,
       });
-      $self[id].isMakingOffer = false;
+      myself.isMakingOffer = false;
     }
   };
 }
@@ -136,14 +152,11 @@ function handleRtcDataChannel(id) {
   };
 }
 
-function handleIceCandidate(id) {
-  return function ({ candidate }) {
+function handleIceCandidate(type, id, candidate) {
     sc.emit("signal", {
-      to: id,
+      to: id, type, candidate,
       from: $self.id,
-      signal: { candidate: candidate },
     });
-  };
 }
 
 function handleRtcConnectionStateChange(id) {
@@ -157,7 +170,7 @@ function handleRtcTrack(id) {
   return function ({ track, streams: [stream] }) {
     console.log("Attempt to display media from peer...");
     // attach our track to the DOM
-    displayStream(`#peer-${id}`, stream);
+    displayStream(id, stream);
   };
 }
 
@@ -186,15 +199,21 @@ function handleScConnect() {
 
 function handleScConnectedPeer(id) {
   console.log("Connected peer ID:", id);
-  initializeSelfAndPeerById(id, false);
-  establishCallFeatures(id);
+      initializeSelfAndPeerById(VIDEO_CHAT, id, true);
+      establishCallFeatures(id);
+
+      initializeSelfAndPeerById(TEXT_CHAT, id, true);
+      establishCallFeatures(id);
 }
 
 function handleScConnectedPeers(ids) {
   console.log(`Connected peer IDs: ${ids.join(", ")}`);
   for (let id of ids) {
     if (id !== $self.id) {
-      initializeSelfAndPeerById(id, true);
+      initializeSelfAndPeerById(VIDEO_CHAT, id, true);
+      establishCallFeatures(id);
+
+      initializeSelfAndPeerById(TEXT_CHAT, id, true);
       establishCallFeatures(id);
     }
   }
@@ -208,7 +227,7 @@ function handleScDisconnectedPeer(id) {
 async function handleScSignal({ from, signal: { description, candidate } }) {
   console.log("Heard signal event!");
   const id = from;
-  const peer = $peers[id];
+  const peer = $peers[type][id];
   if (description) {
     console.log("Received SDP Signal:", description);
 
@@ -287,6 +306,28 @@ function handleButton(e) {
   }
 }
 
+function establishChatFeatures(id){
+  registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
+  const peer = $peers[TEXT_CHAT][id];
+  peer.dataChannel = peer.connection.createDataChannel(TEXT_CHAT,{
+    negotiated: true,
+    id: $self.controlTextId,
+  })
+  peer.dataChannel.onmessage = handleTextMessage;
+}
+
+const chat_form = document.querySelector(".chat-form");
+chat_form.addEventListener("submit", handleTextMessage);
+
+function handleTextMessage( {data} , sender){
+  console.log('Message: ', data);
+  const log = document.querySelector('#chat-log');
+  const li = document.createElement('li');
+  li.innerText = data;
+  li.className = sender;
+  log.appendChild(li);
+}
+
 function handleChatForm(e) {
   e.preventDefault();
   const form = e.target;
@@ -295,8 +336,8 @@ function handleChatForm(e) {
 
   appendMessage("self", message);
 
-  for (let peer in $peers) {
-    peer.chatChannel.send(message);
+  for (let peer in $peers[TEXT_CHAT]) {
+    $peers[TEXT_CHAT][peerID].chatChannel.send(message);
   }
 
   // Reset chat form when submit
@@ -339,8 +380,10 @@ function shareUsername(username, id) {
 
 // Data Channels
 function addChatChannel(id) {
-  const peer = $peers[id];
-  peer.chatChannel = peer.connection.createDataChannel("chat", {
+  registerRtcEvents(TEXT_CHAT, id);
+  const peer = $peers[TEXT_CHAT][id];
+  peer.chatChannel = peer.connection
+  .createDataChannel("chat", {
     negotiated: true,
     id: 50,
   });
@@ -356,11 +399,9 @@ function addChatChannel(id) {
 const button = document.querySelector(".call-button");
 const leave = document.querySelector(".leave");
 const spotify = document.querySelector(".start-listening");
-const chat_form = document.querySelector(".chat-form");
 const username_form = document.querySelector("#username-form");
 
 button.addEventListener("click", handleButton);
-chat_form.addEventListener("submit", handleChatForm);
 username_form.addEventListener("submit", handleUsernameForm);
 spotify.addEventListener("click", startSpotify);
 leave.addEventListener("click", leaveMeeting);
